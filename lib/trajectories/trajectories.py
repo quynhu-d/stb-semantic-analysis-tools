@@ -11,7 +11,6 @@ def corpus_length(corpus_path):
     return corpus_l
 
 def trajectory_from_text(text, wdict, wdim, text_length_threshold=None):
-    text = line.split()
     if (text_length_threshold is not None) and (len(text) < text_length_threshold):
         return None
     ts = np.array([wdict[w][:wdim] for w in text if w in wdict])
@@ -43,7 +42,7 @@ def get_corpus_trajectories(
                     time_series.append(ts)
     else:
         time_series = []
-        for file in sorted(glob.glob(corpus_path)):
+        for file in tqdm(sorted(glob.glob(corpus_path)), desc='Reading corpus...'):
             with open(file, 'r', encoding='utf-8') as f:
                 text = f.read().split()
             if (nrows is not None) and (len(time_series) == nrows):

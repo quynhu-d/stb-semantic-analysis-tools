@@ -2,3 +2,4 @@ fuzzy-cmeans
 giotto-tda
 numpy
 seaborn
+tqdm
