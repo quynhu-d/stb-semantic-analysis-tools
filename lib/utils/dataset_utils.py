@@ -2,18 +2,10 @@ import numpy as np
 from tqdm.auto import tqdm, trange
 from trajectories import get_corpus_trajectories
 
-dataset_params = {
-    "text_data_path":"../DATASET/English/",
-    "lang":"EN",
-    "language":"english",
-    "m":1,
-    "emb_type":"SVD",
-    "wdict_path":"/home/kdang/EN/english_data/english_newlit_SVD_dict.npy"
-}
-
 
 def get_dataset(text_data_path, lang, language, m, emb_type, wdict_path):
     svd_descending = (lang == 'VN')
+    print("SVD descending:", svd_descending)
     lit_ts = get_corpus_trajectories(
         corpus_path=text_data_path+"Train/lit/*",
         wdict_path=wdict_path, 
@@ -85,3 +77,18 @@ def split_data(dataset, train_set=["lit_1", "balaboba", "gpt2"], test_set=["lit_
             np.full(len(dataset[d]), d[:-2] if 'lit' in d else d) for d in test_set 
         ])
     return (train_ts, y_train), (test_ts, y_test)
+
+def test_dataset_loading():
+    dataset_params = {
+        "text_data_path":"../DATASET/English/",
+        "lang":"EN",
+        "language":"english",
+        "m":1,
+        "emb_type":"SVD",
+        "wdict_path":"/home/kdang/EN/english_data/english_newlit_SVD_dict.npy"
+    }
+    get_dataset(**dataset_params)
+    
+
+if __name__ == '__main__':
+    test_dataset_loading()

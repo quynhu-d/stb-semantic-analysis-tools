@@ -1,5 +1,7 @@
-fuzzy-cmeans
+fuzzy-c-means
 giotto-tda
 numpy
 seaborn
 tqdm
+sklearn
+plotly
