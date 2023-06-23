@@ -13,40 +13,41 @@ dataset_params = {
 
 
 def get_dataset(text_data_path, lang, language, m, emb_type, wdict_path):
+    svd_descending = (lang == 'VN')
     lit_ts = get_corpus_trajectories(
         corpus_path=text_data_path+"Train/lit/*",
         wdict_path=wdict_path, 
-        corpus_saved_as_file=False, wdim=m
+        corpus_saved_as_file=False, wdim=m, svd_descending=svd_descending
     )
 
     gpt2_ts = get_corpus_trajectories(
         corpus_path=text_data_path+"Train/gpt2/*",
         wdict_path=wdict_path, 
-        corpus_saved_as_file=False, wdim=m
+        corpus_saved_as_file=False, wdim=m, svd_descending=svd_descending
     )
 
     balaboba_ts = get_corpus_trajectories(
         corpus_path=text_data_path+"Train/balaboba/*",
         wdict_path=wdict_path, 
-        corpus_saved_as_file=False, wdim=m
+        corpus_saved_as_file=False, wdim=m, svd_descending=svd_descending
     )
 
     lit_test_ts = get_corpus_trajectories(
         corpus_path=text_data_path+"Test/lit/*",
         wdict_path=wdict_path, 
-        corpus_saved_as_file=False, wdim=m
+        corpus_saved_as_file=False, wdim=m, svd_descending=svd_descending
     )
 
     mgpt_test_ts = get_corpus_trajectories(
         corpus_path=text_data_path+"Test/mGPT/*",
         wdict_path=wdict_path, 
-        corpus_saved_as_file=False, wdim=m
+        corpus_saved_as_file=False, wdim=m, svd_descending=svd_descending
     )
 
     lstm_test_ts = get_corpus_trajectories(
         corpus_path=text_data_path+"Test/lstm/*",
         wdict_path=wdict_path, 
-        corpus_saved_as_file=False, wdim=m
+        corpus_saved_as_file=False, wdim=m, svd_descending=svd_descending
     )
     
     return {
