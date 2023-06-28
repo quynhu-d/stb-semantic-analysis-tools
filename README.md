@@ -17,13 +17,13 @@ Used techniques:
 
 ```
 .
-├── lib          # includes full pipelines/
-│   ├── ec
-│   ├── kmeans
-│   ├── fcmeans
-│   ├── wishart
-│   ├── fuzzy
-│   └── tda
-├── examples     # includes examples for implemented methods
-└── results      # includes resulting tables
+├── lib                      # includes full pipelines/
+│   ├── trajectories         # text to semantic trajectory
+│   ├── ordec                # implemented method for entropy-complexity calculations
+│   ├── clustering           # clustering pipelines/
+│   │   ├── pipelines
+│   │   └── WishartFUZZY.py  # implemented Wishart algorithm for fuzzified data
+│   └── tda                  # features using tda                   
+├── examples                 # includes examples for implemented methods
+└── results                  # includes resulting tables
 ```
