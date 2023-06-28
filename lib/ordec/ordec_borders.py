@@ -95,7 +95,7 @@ def plot_distributions(n, m, table=None, borders=None, lang='vn', ax=None, title
             }
         sns.scatterplot(
             x=my_table['entropy'], y=my_table['complexity'], hue=my_table['text_type'],
-            ax=ax, s=10, palette=color_palette, alpha=.7
+            ax=ax, s=20, palette=color_palette, alpha=.7
         )
     else:
         my_table = my_table.sample(n_samples)
