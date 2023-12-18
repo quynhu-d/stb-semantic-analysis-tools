@@ -4,7 +4,7 @@ from sklearn.cluster import KMeans
 
 def get_emb_n(data, n):
     l = len(data)
-    return np.unique(np.concatenate([data[i:l - n + i] for i in range(n)], axis=1), axis=0)
+    return np.concatenate([data[i:l - n + i+1] for i in range(n)], axis=1)
 
 def get_dist_idx(idx, n_max=1000):
     idx = sorted(idx)
