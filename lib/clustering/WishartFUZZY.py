@@ -17,7 +17,7 @@ class Wishart_fuzzy:
         self.dc = dc  # length of mu == 1
         self.dim = dim
 
-    def fit(self, X, mus=None, fuzzified=False, precomputed=False, verbose=True):
+    def fit(self, X, mus=None, fuzzified=False, precomputed=False, verbose=False):
         """
             X (n_objects, n_features) - crisp data
                 or

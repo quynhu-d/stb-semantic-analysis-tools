@@ -1,6 +1,28 @@
 import numpy as np
 from scipy.spatial.distance import pdist
 from sklearn.cluster import KMeans
+from clustering.WishartParallelKD import Wishart
+from clustering.WishartFUZZY import Wishart_fuzzy
+from fcmeans import FCM
+
+
+def get_cluster_model(args, seed=123):
+    if args.method == 'kmeans':
+        return KMeans(args.k, random_state=seed)
+    if args.method == 'wishart':
+        return Wishart(args.k, .1)
+    if args.method == 'fcmeans':
+        return FCM(n_clusters=args.k)
+    if args.method == 'fwishart':
+        return Wishart_fuzzy(args.k, .1, dim=args.dim * args.n)
+
+def get_cluster_labels(model, X_n, args):
+    if args.method == 'kmeans':
+        return model.labels_
+    if 'wishart' in args.method:
+        return model.object_labels
+    if args.method == 'fcmeans':
+        return model.predict(X_n)
 
 def get_emb_n(data, n):
     l = len(data)
@@ -35,14 +57,15 @@ def dist_chars(X_dist, labels, w_noise=False):
         maxs.append(max1)
     return np.array([np.mean(means), np.mean(mins), np.mean(maxs)])
 
-def get_kmeans_features(trajectory, n, k):
-    X_n = get_emb_n(trajectory, n)
+def get_clustering_features(trajectory, args):
+    X_n = get_emb_n(trajectory, args.n)
     X_dist = pdist(X_n)
+    cluster_model = get_cluster_model(args)
     try:
-        km = KMeans(n_clusters=k, random_state=123)
-        km.fit(X_n)
+        cluster_model.fit(X_n)
+        labels = get_cluster_labels(cluster_model, X_n, args)
     except:
         print(len(trajectory))
         print(len(X_n))
         raise
-    return dist_chars(X_dist, km.labels_)
+    return dist_chars(X_dist, labels, w_noise="wishart" in args.method)

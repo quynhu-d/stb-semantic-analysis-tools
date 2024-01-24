@@ -41,9 +41,12 @@ Pipeline parameters:
 
 - `input_path`: path to text file
 - `lang`: `english/russian`, language of the text
+- `split_text`: if set, split text into paragraphs and predict per paragraph
+
 - `wdict_path`: path to word dictionary with .npy extension
 - `wdim`: word embedding dimension (8 by default)
 - `n`: number of words in ngram (2 by default)
-- `k`: number of clusters in kmeans
+- `method`: clustering method (kmeans, fcmeans, wishart)
+- `k`: number of clusters in kmeans/fcmeans; number of neighbours in Wishart
 - `clf_path`: path to pretrained sklearn classifier model, .pkl extension
 - `save_prediction_path`: path to save results as json file
