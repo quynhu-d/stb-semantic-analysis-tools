@@ -100,6 +100,7 @@ def dist_chars(X_dist, labels, w_noise=False):
         X_dist (ndarray): array of shape (text length x text length), pairwise distances
         labels (ndarray): array of shape (text length), clustering labels
         w_noise (bool): if True, noise cluster (with label 0) is not included
+                        additional features: number of clusters, noise ratio
     Returns:
         mean intracluster distances by all clusters
     """
@@ -113,7 +114,11 @@ def dist_chars(X_dist, labels, w_noise=False):
         means.append(mean)
         mins.append(min1)
         maxs.append(max1)
-    return np.array([np.mean(means), np.mean(mins), np.mean(maxs)])
+    result = [np.mean(means), np.mean(mins), np.mean(maxs)]
+    if w_noise:
+        result.append(len(np.unique(labels)) - 1)
+        result.append((labels == 0).mean())
+    return np.array(result)
 
 def get_clustering_features(trajectory, args):
     """
