@@ -31,7 +31,7 @@ Used techniques:
 ## Full pipeline
 
 Black-box solution:
-KMeans-features only. TODO: add different features, retrain models.
+TODO: add fuzzy wishart features, model retraining, hyperparameter selection.
 
 ```bash
 python lib/main.py --input_path="examples/The Picture of Dorian Gray.txt" --save_prediction_path=sample_predictions.json
@@ -46,7 +46,7 @@ Pipeline parameters:
 - `wdict_path`: path to word dictionary with .npy extension
 - `wdim`: word embedding dimension (8 by default)
 - `n`: number of words in ngram (2 by default)
-- `method`: clustering method (kmeans, fcmeans, wishart)
+- `method`: clustering method (kmeans, fcmeans, wishart) or entropy-complexity method ('ec')
 - `k`: number of clusters in kmeans/fcmeans; number of neighbours in Wishart
 - `clf_path`: path to pretrained sklearn classifier model, .pkl extension
 - `save_prediction_path`: path to save results as json file

@@ -7,7 +7,7 @@ from preprocessing.split import split_to_paragraphs
 from preprocessing.text_preprocessing import prepare_russian_text, prepare_english_text
 from trajectories import trajectory_from_text
 import numpy as np
-from clustering_features import get_clustering_features
+from features import get_clustering_features, get_entropy_complexity_features
 
 
 def main():
@@ -37,8 +37,9 @@ def main():
     ]
     trajectory_lengths = np.array(list(map(len, trajectories)))
     paragraph_idx = np.where(trajectory_lengths >= args.k + args.n - 1)[0]
+    features_f = get_entropy_complexity_features if args.method == 'ec' else get_clustering_features
     features = np.array([
-        get_clustering_features(traj, args) 
+        features_f(traj, args) 
         for traj in tqdm(np.array(trajectories)[paragraph_idx], desc='Getting features...')
     ])
     predictions = classifier.predict(features)
@@ -56,12 +57,12 @@ def main():
         json.dump(results, f)
     print(f'Results saved at {args.save_prediction_path}.')
     
-    
+
 def get_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_path', type=str, default="samples/sample.txt")
     parser.add_argument('--lang', type=str, default="english", choices=['english', 'russian'])
-    parser.add_argument('--method', type=str, default="kmeans", choices=['kmeans', 'wishart', 'fcmeans'])
+    parser.add_argument('--method', type=str, default="kmeans", choices=['kmeans', 'wishart', 'fcmeans', 'ec'])
     parser.add_argument('--wdict_path', type=str, default="data/english_lit_SVD_dict.npy")
     parser.add_argument('-wdim', type=int, default=8)
     parser.add_argument('-n', type=int, default=2)

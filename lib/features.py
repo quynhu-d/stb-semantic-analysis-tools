@@ -4,6 +4,28 @@ from sklearn.cluster import KMeans
 from clustering.WishartParallelKD import Wishart
 from clustering.WishartFUZZY import Wishart_fuzzy
 from fcmeans import FCM
+from ordec.ordec import entropy_complexity
+
+
+def get_entropy_complexity_features(trajectory, args):
+    """
+    Pipeline for feature retrieval based on entropy-complexity.
+
+    Params:
+        trajectory (ndarray): consecutive word embeddings
+        args
+    
+    Returns:
+        entropy-complexity features to be passed to classification
+    """
+    X_n = get_emb_n(trajectory, args.n)
+    try:
+        ent, comp = entropy_complexity(X_n, m=args.wdim, n=args.n)
+    except:
+        print(len(trajectory))
+        print(len(X_n))
+        raise
+    return np.array([ent, comp])
 
 
 def get_cluster_model(args, seed=123):
