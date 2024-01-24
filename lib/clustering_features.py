@@ -7,6 +7,9 @@ from fcmeans import FCM
 
 
 def get_cluster_model(args, seed=123):
+    """
+    Wrapper function to get clustering model with set arguments.
+    """
     if args.method == 'kmeans':
         return KMeans(args.k, random_state=seed)
     if args.method == 'wishart':
@@ -17,6 +20,9 @@ def get_cluster_model(args, seed=123):
         return Wishart_fuzzy(args.k, .1, dim=args.dim * args.n)
 
 def get_cluster_labels(model, X_n, args):
+    """
+    Wrapper function to get clustering labels.
+    """
     if args.method == 'kmeans':
         return model.labels_
     if 'wishart' in args.method:
@@ -25,6 +31,15 @@ def get_cluster_labels(model, X_n, args):
         return model.predict(X_n)
 
 def get_emb_n(data, n):
+    """
+    Get concatenated embeddings for n-grams.
+
+    Params:
+        data (ndarray): array of shape (text length x wdim)
+        n (int): number of words in n-gram
+    Returns:
+        ndarray of shape ((text_length - n + 1) x (wdim * n)), consecutive ngram embeddings
+    """
     l = len(data)
     return np.concatenate([data[i:l - n + i+1] for i in range(n)], axis=1)
 
@@ -39,12 +54,33 @@ def get_dist_idx(idx, n_max=1000):
     return d_idx
     
 def cluster_distances(X_dist, cluster_idx, n_max):
+    """
+    Get intracluster distances.
+
+    Params:
+        X_dist (ndarray): array of shape (text length x text length), pairwise distances
+        cluster_idx (int): index of cluster label
+        n_max (int): max length of pairwise array
+    
+    Returns:
+        mean, min, max intracluster distances
+    """
     d = X_dist[get_dist_idx(cluster_idx, n_max)]
     if len(d) == 0:
         return .0, .0, .0
     return d.mean(), d.min(), d.max()
     
 def dist_chars(X_dist, labels, w_noise=False):
+    """
+    Get intracluster characteristics.
+
+    Params:
+        X_dist (ndarray): array of shape (text length x text length), pairwise distances
+        labels (ndarray): array of shape (text length), clustering labels
+        w_noise (bool): if True, noise cluster (with label 0) is not included
+    Returns:
+        mean intracluster distances by all clusters
+    """
     means, mins, maxs = [], [], []
     n_max = int((1 + np.sqrt(1 + X_dist.shape[0] * 8)) // 2)
     for c in set(labels):
@@ -58,6 +94,16 @@ def dist_chars(X_dist, labels, w_noise=False):
     return np.array([np.mean(means), np.mean(mins), np.mean(maxs)])
 
 def get_clustering_features(trajectory, args):
+    """
+    Pipeline for clustering feature retrieval.
+
+    Params:
+        trajectory (ndarray): consecutive word embeddings
+        args
+    
+    Returns:
+        clustering features to be passed to classification
+    """
     X_n = get_emb_n(trajectory, args.n)
     X_dist = pdist(X_n)
     cluster_model = get_cluster_model(args)
